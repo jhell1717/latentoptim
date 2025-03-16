@@ -1,0 +1,16 @@
+[project]
+name = "vae"
+version = "0.0.0"
+description = "Geometry Representation"
+authors = [
+    { name = "Josh Hellewell", email = "jhellewell1722@gmail.com" }
+]
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+dependencies = [
+    "torch",
+]
+
+[tool.setuptools]
+packages = ["vae","data"]
