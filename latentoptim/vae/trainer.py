@@ -9,7 +9,7 @@ class Trainer:
     """_summary_
     """
 
-    def __init__(self, data, model, lr=1e-3, batch_size=128):
+    def __init__(self, data, model, lr=1e-3, batch_size=128,loss = 'mse'):
         """_summary_
 
         Args:
