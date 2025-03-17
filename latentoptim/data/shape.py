@@ -5,7 +5,7 @@ from scipy.spatial import ConvexHull
 
 
 class Shape:
-    def __init__(self, points, n_points=None, normalise=True):
+    def __init__(self, points, n_points=None, normalise=True,rotate=True):
         """
         Base class for shapes, with optional resampling.
 
@@ -23,6 +23,9 @@ class Shape:
             
         if normalise:
             self.points = self._normalise_shape(points)
+
+        if rotate:
+            self.points = self.rotate_shape(self.points)
 
 
     @staticmethod
@@ -79,6 +82,14 @@ class Shape:
         ax.plot(closed_points[:, 0], closed_points[:, 1], "-o", label="Shape")
         ax.set_aspect("equal", adjustable="box")
         plt.show()
+
+    def rotate_shape(self,points,max_rotation = 360):
+        angle = np.random.uniform(0, max_rotation)  # Pick a random rotation angle
+        theta = np.radians(angle)
+        rotation_matrix = np.array([[np.cos(theta), -np.sin(theta)],
+                                [np.sin(theta), np.cos(theta)]])
+        return points @ rotation_matrix.T
+
 
 
 
