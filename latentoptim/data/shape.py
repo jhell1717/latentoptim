@@ -115,7 +115,7 @@ class Shape:
 
 
 class Circle(Shape):
-    def __init__(self, radius=None, n_points=50):
+    def __init__(self, radius=None, n_points=100):
         """
         A circle defined by its radius and number of points.
 
@@ -137,7 +137,7 @@ class Circle(Shape):
 
 class Triangle(Shape):
 
-    def __init__(self, n_points=50, vertices=None):
+    def __init__(self, n_points=100, vertices=None):
         """
         A triangle defined by three vertices, resampled to a fixed number of points.
 
@@ -193,7 +193,7 @@ class Rectangle(Shape):
 
 class Diamond(Shape):
 
-    def __init__(self, width=None, height=None, n_points=50):
+    def __init__(self, width=None, height=None, n_points=100):
         if width is None:
             width = np.random.uniform(0.1, 0.5)
         if height is None:
@@ -219,7 +219,7 @@ class Heart(Shape):
 
 class Oval(Shape):
 
-    def __init__(self, major_axis=None, minor_axis=None, n_points=50):
+    def __init__(self, major_axis=None, minor_axis=None, n_points=100):
         if major_axis is None:
             major_axis = np.random.uniform(1, 2)
         if minor_axis is None:
@@ -233,7 +233,7 @@ class Oval(Shape):
 
 class Pentagon(Shape):
 
-    def __init__(self, radius=None, n_points=50):
+    def __init__(self, radius=None, n_points=100):
         if radius is None:
             radius = np.random.uniform(0.1, 1)
         theta = np.linspace(0, 2 * np.pi, 6, endpoint=True)
@@ -244,7 +244,7 @@ class Pentagon(Shape):
 
 class Star(Shape):
 
-    def __init__(self, n_arms=None, outer_radius=None, inner_radius=None, n_points=50):
+    def __init__(self, n_arms=None, outer_radius=None, inner_radius=None, n_points=100):
         """
         A star shape with alternating inner and outer points.
 

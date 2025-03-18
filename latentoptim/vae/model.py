@@ -20,22 +20,22 @@ class VAE(nn.Module):
 
         # Encoder
         self.encoder = nn.Sequential(
-            nn.Linear(200, 128),
+            nn.Linear(200, 256),
             nn.ReLU(),
-            nn.Linear(128, 64),
+            nn.Linear(256, 128),
             nn.ReLU()
         )
 
-        self.fc_mu = nn.Linear(64, latent_dim)
-        self.fc_logvar = nn.Linear(64, latent_dim)
+        self.fc_mu = nn.Linear(128, latent_dim)
+        self.fc_logvar = nn.Linear(128, latent_dim)
 
         # Decoder
         self.decoder = nn.Sequential(
-            nn.Linear(latent_dim, 64),
+            nn.Linear(latent_dim, 128),
             nn.ReLU(),
-            nn.Linear(64, 128),
+            nn.Linear(128, 256),
             nn.ReLU(),
-            nn.Linear(128, 200)
+            nn.Linear(256, 200)
         )
 
     def reparameterise(self, mu, log_var):

@@ -68,17 +68,15 @@ class Loss:
         self.mu = mu
         self.logvar = logvar
 
-    def compute_loss_mse(self):
+    def compute_loss_mse(self,beta=1.0):
         """_summary_
 
         Returns:
             _type_: _description_
         """
-        recon_loss = nn.MSELoss()(self.x_recon, self.x)
-        kl_loss = -0.5 * \
-            torch.sum(1+self.logvar - self.mu.pow(2) -
-                      self.logvar.exp()) / self.x.size(0)
-        return recon_loss + kl_loss
+        recon_loss = nn.MSELoss(reduction='sum')(self.x_recon, self.x)
+        kl_loss = -0.5 * torch.sum(1+self.logvar - self.mu.pow(2) - self.logvar.exp())
+        return recon_loss + beta * kl_loss
     
     def compute_loss_bce(self):
         """_summary_
