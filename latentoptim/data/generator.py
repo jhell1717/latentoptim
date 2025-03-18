@@ -1,7 +1,7 @@
 import numpy as np
 from tqdm import tqdm
 
-from .shape import Circle, Triangle, NoisyShape, Rectangle, Diamond, Heart, Oval, RotatedShape, Star, Pentagon
+from .shape import Circle, Triangle, Rectangle, Diamond, Heart, Oval, Star, Pentagon
 
 class Generator:
     """_summary_
@@ -50,17 +50,6 @@ class Generator:
 
             if shape_type == 'Pentagon':
                 shape = Pentagon(n_points=100)
-
-            if np.random.rand() > 0.5:
-                shape = RotatedShape(shape, max_rotation=360)
-
-            if np.random.rand() > 0.7:
-                noise_fraction = np.random.uniform(0.1, 0.6)
-                shape = NoisyShape(shape, noise_level=np.random.uniform(
-                    0.01, 0.05), noise_fraction=noise_fraction)
-            # shape.plot()
-            # if np.random.rand() > 0.3:
-            #     shape = Shape.skew(shape.points)
 
             self.shapes.append(shape)
         return self.shapes

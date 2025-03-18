@@ -33,7 +33,7 @@ class Trainer:
             x = batch[0].to(self.device)
             self.optimiser.zero_grad()
             x_recon, mu, logvar = self.model(x)
-            loss = Loss(x, x_recon, mu, logvar).compute_loss_bce()
+            loss = Loss(x, x_recon, mu, logvar).compute_loss_mse()
             loss.backward()
             self.optimiser.step()
             self.epoch_loss += loss.item()

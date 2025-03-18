@@ -3,9 +3,8 @@ import matplotlib.pyplot as plt
 from scipy.interpolate import interp1d
 from scipy.spatial import ConvexHull
 
-
 class Shape:
-    def __init__(self, points, n_points=None, normalise=True,rotate=True):
+    def __init__(self, points, n_points=None, normalise=True,rotate=True,skew = True):
         """
         Base class for shapes, with optional resampling.
 
@@ -18,14 +17,18 @@ class Shape:
             Number of points to resample the shape to. If None, no resampling
             is performed.
         """
-        if n_points is not None:
-            points = self._resample(points, n_points)
-            
-        if normalise:
-            self.points = self._normalise_shape(points)
 
+        if n_points is not None:
+            self.points = self._resample(points, n_points)
+        
         if rotate:
-            self.points = self.rotate_shape(self.points)
+            self.points = self.rotate_shape()
+        
+        if skew and np.random.randn() < 0.3:
+            self.points = self.skew_shape()
+
+        if normalise:
+            self.points = self._normalise_shape(self.points)
 
 
     @staticmethod
@@ -83,12 +86,30 @@ class Shape:
         ax.set_aspect("equal", adjustable="box")
         plt.show()
 
-    def rotate_shape(self,points,max_rotation = 360):
+    def rotate_shape(self,max_rotation = 360):
         angle = np.random.uniform(0, max_rotation)  # Pick a random rotation angle
         theta = np.radians(angle)
         rotation_matrix = np.array([[np.cos(theta), -np.sin(theta)],
                                 [np.sin(theta), np.cos(theta)]])
-        return points @ rotation_matrix.T
+        return self.points @ rotation_matrix.T
+    
+    def skew_shape(self, max_shear=0.8):
+        """_summary_
+
+        Args:
+            max_shear (float, optional): _description_. Defaults to 0.5.
+
+        Returns:
+            _type_: _description_
+        """
+        shear_x = np.random.uniform(-max_shear, max_shear)  # Shear factor for x
+        shear_y = np.random.uniform(-max_shear, max_shear)  # Shear factor for y
+
+        shear_matrix = np.array([[1, shear_x],
+                                [shear_y, 1]])
+
+        return  self.points @ shear_matrix.T  # Apply transformation
+
 
 
 
@@ -111,7 +132,7 @@ class Circle(Shape):
         theta = np.linspace(0, 2 * np.pi, n_points, endpoint=False)
         points = np.column_stack(
             (radius * np.cos(theta), radius * np.sin(theta)))
-        super().__init__(points, n_points,normalise=True)
+        super().__init__(points, n_points)
 
 
 class Triangle(Shape):
@@ -252,59 +273,3 @@ class Star(Shape):
         super().__init__(points, n_points)
 
 
-class NoisyShape(Shape):
-    def __init__(self, shape, noise_level=0.05, noise_fraction=0.3):
-        """
-        Apply random noise to a subset of points in a given shape.
-
-        Parameters
-        ----------
-        shape : Shape
-            The shape to which noise will be applied.
-
-        noise_level : float
-            The maximum amount of random noise added to each selected point.
-
-        noise_fraction : float
-            Fraction of points to perturb (0 to 1).
-        """
-        points = shape.points.copy()
-        num_points = len(points)
-
-        # Randomly select a fraction of points to modify
-        num_noisy_points = int(noise_fraction * num_points)
-        indices = np.random.choice(num_points, num_noisy_points, replace=False)
-
-        # Apply random perturbations to selected points
-        noise = np.random.uniform(-noise_level,
-                                  noise_level, size=(num_noisy_points, 2))
-        points[indices] += noise
-
-        super().__init__(points, n_points=num_points)
-
-# 🔹 Place rotate_points function here:
-def rotate_points(points, angle):
-    """ Rotates the given points by a specified angle (in degrees) around the origin. """
-    theta = np.radians(angle)
-    rotation_matrix = np.array([[np.cos(theta), -np.sin(theta)],
-                                [np.sin(theta), np.cos(theta)]])
-    return points @ rotation_matrix.T
-
-
-# 🔹 Then define the RotatedShape class
-class RotatedShape(Shape):
-    def __init__(self, base_shape, max_rotation=360):
-        """
-        Rotates a given shape by a random angle.
-
-        Parameters
-        ----------
-        base_shape : Shape
-            The shape to rotate.
-        max_rotation : float
-            Maximum rotation angle in degrees.
-        """
-        angle = np.random.uniform(
-            0, max_rotation)  # Pick a random rotation angle
-        rotated_points = rotate_points(base_shape.points, angle)
-        super().__init__(rotated_points, len(rotated_points))

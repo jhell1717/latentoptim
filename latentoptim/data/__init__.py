@@ -1,2 +1,2 @@
-from .shape import Circle, Triangle, NoisyShape, Rectangle, Diamond, Heart, Oval, RotatedShape, Star, Pentagon
+from .shape import Circle, Triangle, Rectangle, Diamond, Heart, Oval, Star, Pentagon
 from .generator import Generator

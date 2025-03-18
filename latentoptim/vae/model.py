@@ -65,5 +65,5 @@ class VAE(nn.Module):
         x = self.encoder(x)
         mu, log_var = self.fc_mu(x), self.fc_logvar(x)
         z = self.reparameterise(mu, log_var)
-        x_recon = torch.sigmoid(self.decoder(z))
+        x_recon = self.decoder(z)
         return x_recon, mu, log_var
