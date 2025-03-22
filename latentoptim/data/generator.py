@@ -1,12 +1,14 @@
 import numpy as np
 from tqdm import tqdm
 
-from .shape import Circle, Triangle, Rectangle, Diamond, Heart, Oval, Star, Pentagon
+from .shape import Circle, Triangle, Rectangle, Diamond, Heart, Oval, Star, Pentagon, Square
+
 
 class Generator:
     """_summary_
     """
-    def __init__(self,resolution,num_shapes = 100):
+
+    def __init__(self, resolution, num_shapes=100):
         """_summary_
 
         Args:
@@ -21,33 +23,32 @@ class Generator:
         """
         for _ in tqdm(range(self.num_shapes)):
             shape_type = np.random.choice(
-                ['Circle', 'Triangle', 'Rectangle', 'Diamond', 'Heart', 'Oval', 'Star', 'Pentagon'])
+                ['Circle', 'Triangle', 'Rectangle', 'Diamond', 'Heart', 'Oval', 'Star', 'Pentagon', 'Square'])
 
             if shape_type == 'Circle':
-                shape = Circle(n_points=self.resolution)
+                shape = Circle(radius=1, n_points=self.resolution)
 
             if shape_type == 'Triangle':
                 shape = Triangle(n_points=self.resolution)
 
             if shape_type == 'Rectangle':
-                shape = Rectangle(n_points=self.resolution)
-
+                shape = Rectangle(width=3, height=1, n_points=self.resolution)
 
             if shape_type == 'Diamond':
-                shape = Diamond(n_points=self.resolution)
+                shape = Diamond(width=1, height=2, n_points=self.resolution)
 
+            if shape_type == 'Square':
+                shape = Square(side_length=1, n_points=self.resolution)
 
             if shape_type == 'Heart':
                 shape = Heart(n_points=self.resolution)
 
-
             if shape_type == 'Star':
-                shape = Star(n_points=self.resolution)
-
+                shape = Star(n_arms=5, outer_radius=1,
+                             inner_radius=0.5, n_points=self.resolution)
 
             if shape_type == 'Oval':
-                shape = Oval(n_points=self.resolution)
-
+                shape = Oval(major_axis=1,minor_axis=3,n_points=self.resolution)
 
             if shape_type == 'Pentagon':
                 shape = Pentagon(n_points=self.resolution)

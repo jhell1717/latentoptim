@@ -111,6 +111,21 @@ class Shape:
         return  self.points @ shear_matrix.T  # Apply transformation
 
 
+class Square(Shape):
+
+    def __init__(self, side_length=1, n_points=50):
+        if side_length is None:
+            side_length = np.random.uniform(0.1, 1)
+        points = np.array(
+            [
+                [-side_length / 2, -side_length / 2],
+                [side_length / 2, -side_length / 2],
+                [side_length / 2, side_length / 2],
+                [-side_length / 2, side_length / 2],
+            ]
+        )
+        super().__init__(points, n_points)
+
 
 
 
