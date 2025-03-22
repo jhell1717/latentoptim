@@ -1,7 +1,7 @@
 
 import torch
 import torch.nn as nn
-from torch.optim import AdamW
+from torch.optim import Adam
 from torch.utils.data import DataLoader
 
 
@@ -21,7 +21,7 @@ class Trainer:
         self.device = torch.device(
             'cuda' if torch.cuda.is_available() else 'cpu')
         self.model = model
-        self.optimiser = AdamW(self.model.parameters(), lr=lr)
+        self.optimiser = Adam(self.model.parameters(), lr=lr)
         self.epoch_loss = None
         self.dataloader = DataLoader(data, batch_size=batch_size, shuffle=True)
 
@@ -74,9 +74,10 @@ class Loss:
         Returns:
             _type_: _description_
         """
-        recon_loss = nn.MSELoss(reduction='sum')(self.x_recon, self.x)
+        mse = nn.functional.mse_loss(self.x_recon,self.x,reduction='sum')
+        # recon_loss = nn.MSELoss(reduction='sum')(self.x_recon, self.x)
         kl_loss = -0.5 * torch.sum(1+self.logvar - self.mu.pow(2) - self.logvar.exp())
-        return recon_loss + beta * kl_loss
+        return mse + beta * kl_loss
     
     def compute_loss_bce(self):
         """_summary_

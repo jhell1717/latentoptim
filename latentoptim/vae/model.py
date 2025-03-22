@@ -8,7 +8,7 @@ class VAE(nn.Module):
         nn (_type_): _description_
     """
 
-    def __init__(self, latent_dim=2):
+    def __init__(self,input_size, latent_dim=2):
         """_summary_
 
         Args:
@@ -17,10 +17,11 @@ class VAE(nn.Module):
         super(VAE, self).__init__()
 
         self.latent_dim = latent_dim
+        self.input_size = input_size
 
         # Encoder
         self.encoder = nn.Sequential(
-            nn.Linear(200, 256),
+            nn.Linear(self.input_size, 256),
             nn.ReLU(),
             nn.Linear(256, 128),
             nn.ReLU()
@@ -35,7 +36,7 @@ class VAE(nn.Module):
             nn.ReLU(),
             nn.Linear(128, 256),
             nn.ReLU(),
-            nn.Linear(256, 200)
+            nn.Linear(256, input_size)
         )
 
     def reparameterise(self, mu, log_var):

@@ -29,7 +29,7 @@ class Generator:
                 shape = Circle(radius=1, n_points=self.resolution)
 
             if shape_type == 'Triangle':
-                shape = Triangle(n_points=self.resolution)
+                shape = Triangle(vertices=np.array([[0,0],[1,0],[0.5,np.sqrt(3)/2]]),n_points=self.resolution)
 
             if shape_type == 'Rectangle':
                 shape = Rectangle(width=3, height=1, n_points=self.resolution)

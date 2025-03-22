@@ -93,7 +93,7 @@ class Shape:
                                 [np.sin(theta), np.cos(theta)]])
         return self.points @ rotation_matrix.T
     
-    def skew_shape(self, max_shear=0.8):
+    def skew_shape(self, max_shear=0.4):
         """_summary_
 
         Args:
