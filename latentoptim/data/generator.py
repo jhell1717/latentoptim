@@ -50,8 +50,8 @@ class Generator:
             if shape_type == 'Oval':
                 shape = Oval(major_axis=1,minor_axis=3,n_points=self.resolution)
 
-            if shape_type == 'Pentagon':
-                shape = Pentagon(radius=1,n_points=self.resolution)
+            # if shape_type == 'Pentagon':
+            #     shape = Pentagon(radius=1,n_points=self.resolution)
 
             self.shapes.append(shape)
         return self.shapes

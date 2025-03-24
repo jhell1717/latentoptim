@@ -4,7 +4,7 @@ from scipy.interpolate import interp1d
 from scipy.spatial import ConvexHull
 
 class Shape:
-    def __init__(self, points, n_points=None, normalise=True,rotate=True,skew = True):
+    def __init__(self, points, n_points=None, normalise=True,rotate=False,skew = True):
         """
         Base class for shapes, with optional resampling.
 
