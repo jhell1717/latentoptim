@@ -2,6 +2,7 @@ import torch
 from torch.utils.data import Dataset
 
 
+
 class ShapeData(Dataset):
     """_summary_
 

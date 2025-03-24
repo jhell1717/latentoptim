@@ -1,7 +1,7 @@
 
 import torch
 import torch.nn as nn
-from torch.optim import AdamW
+from torch.optim import Adam
 from torch.utils.data import DataLoader
 
 
@@ -9,7 +9,7 @@ class Trainer:
     """_summary_
     """
 
-    def __init__(self, data, model, lr=1e-3, batch_size=128):
+    def __init__(self, data, model, lr=1e-3, batch_size=128,loss = 'mse'):
         """_summary_
 
         Args:
@@ -21,7 +21,7 @@ class Trainer:
         self.device = torch.device(
             'cuda' if torch.cuda.is_available() else 'cpu')
         self.model = model
-        self.optimiser = AdamW(self.model.parameters(), lr=lr)
+        self.optimiser = Adam(self.model.parameters(), lr=lr)
         self.epoch_loss = None
         self.dataloader = DataLoader(data, batch_size=batch_size, shuffle=True)
 
@@ -33,7 +33,7 @@ class Trainer:
             x = batch[0].to(self.device)
             self.optimiser.zero_grad()
             x_recon, mu, logvar = self.model(x)
-            loss = Loss(x, x_recon, mu, logvar).compute_loss_bce()
+            loss = Loss(x, x_recon, mu, logvar).compute_loss_mse()
             loss.backward()
             self.optimiser.step()
             self.epoch_loss += loss.item()
@@ -68,17 +68,16 @@ class Loss:
         self.mu = mu
         self.logvar = logvar
 
-    def compute_loss_mse(self):
+    def compute_loss_mse(self,beta=1.0):
         """_summary_
 
         Returns:
             _type_: _description_
         """
-        recon_loss = nn.MSELoss()(self.x_recon, self.x)
-        kl_loss = -0.5 * \
-            torch.sum(1+self.logvar - self.mu.pow(2) -
-                      self.logvar.exp()) / self.x.size(0)
-        return recon_loss + kl_loss
+        mse = nn.functional.mse_loss(self.x_recon,self.x,reduction='sum')
+        # recon_loss = nn.MSELoss(reduction='sum')(self.x_recon, self.x)
+        kl_loss = -0.5 * torch.sum(1+self.logvar - self.mu.pow(2) - self.logvar.exp())
+        return mse + beta * kl_loss
     
     def compute_loss_bce(self):
         """_summary_
