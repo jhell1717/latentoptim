@@ -1,4 +1,4 @@
-# Enabling Sample Efficient Design Space Exploration through Machine Learning Methods
+# Enabling Sample Efficient Design Space Exploration through Machine Learning
 
 ## Project Overview
 
@@ -15,7 +15,6 @@ Additionally, to supplement the low dimensional representations, methods for int
 1. **Research and Compare AI Models**: Explore and evaluate different AI approaches for encoding geometries into low-dimensional spaces, including:
 
    - Autoencoders (AEs)
-   - Encoder-Decoders
    - Generative Adversarial Networks (GANs)
    - Diffusion Models
    - Implicit Neural Representation.

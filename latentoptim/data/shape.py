@@ -20,12 +20,12 @@ class Shape:
 
         if n_points is not None:
             self.points = self._resample(points, n_points)
+
+        if skew and np.random.randn() < 0.3:
+            self.points = self.skew_shape()
         
         if rotate:
             self.points = self.rotate_shape()
-        
-        if skew and np.random.randn() < 0.3:
-            self.points = self.skew_shape()
 
         if normalise:
             self.points = self._normalise_shape(self.points)
@@ -82,8 +82,12 @@ class Shape:
         if ax is None:
             _, ax = plt.subplots()
         closed_points = np.vstack([self.points, self.points[0]])
-        ax.plot(closed_points[:, 0], closed_points[:, 1], "-o", label="Shape")
+        ax.plot(closed_points[:, 0], closed_points[:, 1], "-o", label="Shape",markersize=3)
         ax.set_aspect("equal", adjustable="box")
+        ax.set_xlim(0,1)
+        ax.set_ylim(0,1)
+        plt.xlabel('X')
+        plt.ylabel('Y')
         plt.show()
 
     def rotate_shape(self,max_rotation = 360):
@@ -91,7 +95,9 @@ class Shape:
         theta = np.radians(angle)
         rotation_matrix = np.array([[np.cos(theta), -np.sin(theta)],
                                 [np.sin(theta), np.cos(theta)]])
-        return self.points @ rotation_matrix.T
+        
+        centroid = np.mean(self.points,axis=0)
+        return (self.points - centroid) @ rotation_matrix.T + centroid
     
     def skew_shape(self, max_shear=0.4):
         """_summary_
