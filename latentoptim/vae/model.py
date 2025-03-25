@@ -1,48 +1,70 @@
 import torch
 import torch.nn as nn
 
-import torch
-import torch.nn as nn
-
 
 class VAE(nn.Module):
+    """_summary
+    Args:
+        nn (_type_): _description_
+    """
 
-    def __init__(self, input_dim, latent_dim):
+    def __init__(self,input_size, latent_dim=2):
+        """_summary_
+
+        Args:
+            latent_dim (int, optional): Size of latent layer dimension. Defaults to 2.
+        """
         super(VAE, self).__init__()
 
-        self.input_dim = input_dim
         self.latent_dim = latent_dim
+        self.input_size = input_size
 
         # Encoder
-        self.fc1 = nn.Linear(self.input_dim, 256)
-        self.fc2 = nn.Linear(256, 128)
-        self.fc2_mean = nn.Linear(128, self.latent_dim)
-        self.fc2_logvar = nn.Linear(128, self.latent_dim)
+        self.encoder = nn.Sequential(
+            nn.Linear(self.input_size, 256),
+            nn.ReLU(),
+            nn.Linear(256, 128),
+            nn.ReLU()
+        )
+
+        self.fc_mu = nn.Linear(128, latent_dim)
+        self.fc_logvar = nn.Linear(128, latent_dim)
 
         # Decoder
-        self.fc3 = nn.Linear(self.latent_dim, 128)
-        self.fc4 = nn.Linear(128, 256)
-        self.fc5 = nn.Linear(256, self.input_dim)
+        self.decoder = nn.Sequential(
+            nn.Linear(latent_dim, 128),
+            nn.ReLU(),
+            nn.Linear(128, 256),
+            nn.ReLU(),
+            nn.Linear(256, input_size)
+        )
 
-    def encode(self, x):
-        h = torch.relu(self.fc1(x))
-        h = torch.relu(self.fc2(h))
-        mean = self.fc2_mean(h)
-        logvar = self.fc2_logvar(h)
-        return mean, logvar
+    def reparameterise(self, mu, log_var):
+        """_summary_
 
-    def reparameterise(self, mean, logvar):
-        std = torch.exp(0.5 * logvar)
+        Args:
+            mu (_type_): Vector of mu for latent dimension attributes.
+            log_var (_type_): Vector of variances for latent dimensions attributes.
+
+        Returns:
+            _type_: _description_
+        """
+        std = torch.exp(0.5*log_var)
         eps = torch.randn_like(std)
-        return mean + eps * std
-
-    def decode(self, z):
-        h = torch.relu(self.fc3(z))
-        h = torch.relu(self.fc4(h))
-        return self.fc5(h)
+        return mu + eps * std
+    
 
     def forward(self, x):
-        mean, logvar = self.encode(x)
-        z = self.reparameterise(mean, logvar)
-        reconstructed_x = self.decode(z)
-        return reconstructed_x, mean, logvar
+        """_summary_
+
+        Args:
+            x (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
+        x = self.encoder(x)
+        mu, log_var = self.fc_mu(x), self.fc_logvar(x)
+        z = self.reparameterise(mu, log_var)
+        x_recon = self.decoder(z)
+        return x_recon, mu, log_var

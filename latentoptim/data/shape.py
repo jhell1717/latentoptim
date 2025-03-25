@@ -99,7 +99,7 @@ class Shape:
         centroid = np.mean(self.points,axis=0)
         return (self.points - centroid) @ rotation_matrix.T + centroid
     
-    def skew_shape(self, max_shear=0.4):
+    def skew_shape(self, max_shear=0.6):
         """_summary_
 
         Args:
