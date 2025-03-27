@@ -2,4 +2,5 @@
 
 build/
 vae.egg-info/
-/Users/joshuahellewell/Desktop/01-dev/latentoptim/examples/shapes.pkl
+
+examples/shapes.pkl
