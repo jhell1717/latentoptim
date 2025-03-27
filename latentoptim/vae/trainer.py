@@ -1,9 +1,10 @@
+import os
 
 import torch
 import torch.nn as nn
 from torch.optim import Adam
-import os
 from torch.utils.data import DataLoader
+
 import matplotlib.pyplot as plt
 
 # Use LaTeX-style formatting
@@ -66,7 +67,7 @@ class Trainer:
         Args:
             epoch (_type_): _description_
         """
-        checkpoint_path = os.path.join(self.model_dir, f'vae_epoch_{epoch}.pt')
+        checkpoint_path = os.path.join(self.model_dir, f'vae_epoch_{epoch}_mse{self.epoch_loss:.1f}.pt')
 
         torch.save(self.model, checkpoint_path)
 
@@ -83,7 +84,7 @@ class Trainer:
             self.optimiser.step()
             self.epoch_loss += loss.item()
 
-    def train_model(self, epochs=10):
+    def train_model(self, epochs=10,checkpoint_interval=100):
         """_summary_
 
         Args:
@@ -96,8 +97,10 @@ class Trainer:
             self.loss_history.append(self.epoch_loss)
             print(f"Epoch {epoch+1}, Loss: {self.epoch_loss}")
 
-            if epoch % 10 == 0:
+            if epoch % checkpoint_interval == 0:
                 self.save_checkpoint(epoch)
+
+        torch.save(self.model,os.path.join(self.model_dir,f'vae_epoch_{epochs}_mse{self.epoch_loss:.1f}.pt'))
 
         self._plot_loss()
 
@@ -123,7 +126,7 @@ class Loss:
     """_summary_
     """
 
-    def __init__(self, x, x_recon, mu, logvar):
+    def __init__(self, x, x_recon, mu, logvar,beta=10):
         """_summary_
 
         Args:
@@ -132,12 +135,13 @@ class Loss:
             mu (_type_): _description_
             logvar (_type_): _description_
         """
+        self.beta = beta
         self.x = x
         self.x_recon = x_recon
         self.mu = mu
         self.logvar = logvar
 
-    def compute_loss_mse(self, beta=1.0):
+    def compute_loss_mse(self):
         """_summary_
 
         Returns:
@@ -147,7 +151,7 @@ class Loss:
         # recon_loss = nn.MSELoss(reduction='sum')(self.x_recon, self.x)
         kl_loss = -0.5 * torch.sum(1+self.logvar -
                                    self.mu.pow(2) - self.logvar.exp())
-        return mse + beta * kl_loss
+        return mse + self.beta * kl_loss
 
     def compute_loss_bce(self):
         """_summary_

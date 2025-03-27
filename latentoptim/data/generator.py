@@ -23,7 +23,7 @@ class Generator:
         """
         for _ in tqdm(range(self.num_shapes)):
             shape_type = np.random.choice(
-                ['Circle', 'Triangle', 'Rectangle', 'Diamond', 'Heart', 'Oval', 'Star', 'Pentagon', 'Square'])
+                ['Circle', 'Triangle', 'Rectangle', 'Diamond', 'Heart', 'Oval', 'Star', 'Square'])
 
             if shape_type == 'Circle':
                 shape = Circle(radius=1, n_points=self.resolution)
