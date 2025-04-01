@@ -75,7 +75,7 @@ class Trainer(ModelRecord):
     """_summary_
     """
 
-    def __init__(self, data, model, base_dir, trained_data, model_name, batch_size, val_data=None, lr=1e-3):
+    def __init__(self, data, model, base_dir, trained_data, model_name,batch_size,lr=1e-3):
         """_summary_
 
         Args:
@@ -91,20 +91,17 @@ class Trainer(ModelRecord):
         self.model = model
         self.optimiser = Adam(self.model.parameters(), lr=self.lr)
         self.epoch_loss = None
-        self.val_loss = None
 
         self.dataloader = DataLoader(data, batch_size=batch_size, shuffle=True)
-        self.val_dataloader = DataLoader(val_data, batch_size=batch_size, shuffle=False) if val_data is not None else None
 
         os.makedirs(self.model_dir, exist_ok=True)
 
         self.loss_history = []
-        self.val_loss_history = []
 
     def train(self):
-        """Training loop for one epoch"""
+        """_summary_
+        """
         self.epoch_loss = 0
-        self.model.train()
         for batch in self.dataloader:
             x = batch[0].to(self.device)
             self.optimiser.zero_grad()
@@ -114,37 +111,18 @@ class Trainer(ModelRecord):
             self.optimiser.step()
             self.epoch_loss += loss.item()
 
-    def validate(self):
-        """Validation loop"""
-        if self.val_dataloader is None:
-            return None
-            
-        self.val_loss = 0
-        self.model.eval()
-        with torch.no_grad():
-            for batch in self.val_dataloader:
-                x = batch[0].to(self.device)
-                x_recon, mu, logvar = self.model(x)
-                loss = Loss(x, x_recon, mu, logvar).compute_loss_mse()
-                self.val_loss += loss.item()
-        return self.val_loss
+    def train_model(self, epochs=10, checkpoint_interval=100):
+        """_summary_
 
-    def train_model(self, model_name, epochs=10, checkpoint_interval=100):
-        """Train the model for specified number of epochs"""
+        Args:
+            epochs (int, optional): _description_. Defaults to 10.
+        """
         self.model.train()
         for epoch in range(epochs):
             self.train()
-            val_loss = self.validate()
 
             self.loss_history.append(self.epoch_loss)
-            if val_loss is not None:
-                self.val_loss_history.append(val_loss)
-            
-            print(f"Epoch {epoch+1}, Train Loss: {self.epoch_loss:.2f}", end="")
-            if val_loss is not None:
-                print(f", Val Loss: {val_loss:.2f}")
-            else:
-                print()
+            print(f"Epoch {epoch+1}, Loss: {self.epoch_loss}")
 
             if epoch % checkpoint_interval == 0:
                 self.save_checkpoint(epoch)
@@ -152,21 +130,18 @@ class Trainer(ModelRecord):
         save_path = os.path.join(
             self.model_dir, f'vae_epoch_{epochs}_mse{self.epoch_loss:.1f}.pt')
         torch.save(self.model, save_path)
-        self.log_results(epochs, save_path)
+        self.log_results(epochs,save_path)
 
         self._plot_loss()
 
     def _plot_loss(self):
-        """Plots and saves the loss curves."""
+        """Plots and saves the loss curve."""
         plt.figure(figsize=(8, 6))
         plt.plot(range(1, len(self.loss_history) + 1),
-                 self.loss_history, label='Train Loss', color='b')
-        if self.val_loss_history:
-            plt.plot(range(1, len(self.val_loss_history) + 1),
-                     self.val_loss_history, label='Validation Loss', color='r')
+                 self.loss_history, label='MSE Loss', color='b')
         plt.xlabel("Epochs")
         plt.ylabel("Loss")
-        plt.title("Training and Validation Loss Over Time")
+        plt.title("Training Loss Over Time")
         plt.legend()
         plt.grid()
 
@@ -181,7 +156,7 @@ class Loss:
     """_summary_
     """
 
-    def __init__(self, x, x_recon, mu, logvar, beta=10):
+    def __init__(self, x, x_recon, mu, logvar, beta=1):
         """_summary_
 
         Args:
