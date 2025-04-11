@@ -13,4 +13,4 @@ dependencies = [
 ]
 
 [tool.setuptools]
-packages = ["vae","data"]
+packages = ["vae","data","ga"]
