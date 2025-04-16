@@ -1,56 +1,44 @@
-import random
-from tqdm import tqdm
+from .population import Population
 import matplotlib.pyplot as plt
 
-
-
 class GeneticAlgorithm:
-    def __init__(
-        self,
-        population,
-        num_generations=50,
-        num_parents=4,
-        mutation_probability=0.05,
-    ):
-        self.population = population
-        self.num_generations = num_generations
-        self.num_parents = num_parents
-        self.mutation_probability = mutation_probability
-        self.fitness = []
-
-    def generate_offspring(self):
+    """_summary_
+    """
+    def __init__(self,shape_pool,pop_size,generations=100,mutation_rate = 0.05):
         """_summary_
+
+        Args:
+            shape_pool (_type_): _description_
+            pop_size (_type_): _description_
+            generations (int, optional): _description_. Defaults to 100.
+            mutation_rate (float, optional): _description_. Defaults to 0.05.
         """
-        new_population = []
-        for _ in range(len(self.population.individuals)):
-            parent_a, parent_b = random.sample(self.population.parents, 2)
-            child = parent_a.crossover(parent_b)
-            child.mutate(self.mutation_probability)
-            new_population.append(child)
+        self.population = shape_pool
+        # self.population = Population(shape_pool,pop_size)
+        self.generations = generations
+        self.mutation_rate = mutation_rate
 
-        self.population.individuals = new_population
-
-    def evolutionary_cycle(self):
-        """_summary_
+    def run_ga(self):
+        """Run the genetic algorithm for the specified number of generations.
         """
-        self.population.evaluate()
-        self.fitness.append(max(self.population.fitness))
-        self.population.select_parents(self.num_parents)
-        self.generate_offspring()
+        best_fitness = []
+        for gen in range(self.generations):
+            self.population.evaluate()
+            best = min(self.population.individuals, key=lambda x: x.fitness)
+            best_fitness.append(best.fitness)  # Store the actual fitness value
+            print(f'Gen {gen} - Best Fitness {best.fitness:.3f}')
+            self.population.generate_new_population(self.mutation_rate)
+            if gen % 200 == 0:
+                best.plot()
+        self.plot_results(best_fitness)
+        
+        
+
+    def plot_results(self,fitness_history):
+        plt.plot(fitness_history)
+        plt.xlabel('Generation')
+        plt.ylabel('Best Fitness (Compactness)')
+        plt.title('Fitness over Generations')
+        plt.show()
 
 
-    def evolve(self):
-        """_summary_
-        """
-        for _ in tqdm(range(self.num_generations), desc="Evolution"):
-            self.evolutionary_cycle()
-
-    def plot_fitness(self):
-        """"""
-        _, ax = plt.subplots(figsize=(8, 4))
-        ax.plot(self.fitness)
-        ax.set_xlabel("Generation")
-        ax.set_ylabel("Fitness")
-        ax.set_title("Fitness Evolution")
-        ax.grid(True)
-        plt.tight_layout()

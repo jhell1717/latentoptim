@@ -55,3 +55,19 @@ class Generator:
 
             self.shapes.append(shape)
         return self.shapes
+
+    def generate_random_points(self, n_points=200):
+        """Generate a random set of 2D points for initial population.
+
+        Args:
+            n_points (int, optional): Number of points to generate. Defaults to 200.
+
+        Returns:
+            numpy.ndarray: Array of shape (n_points, 2) containing random points.
+        """
+        # Generate random points in [0, 1] range
+        points = np.random.rand(n_points, 2)
+        
+        # Create a shape object to normalize and resample the points
+        shape = Shape(points, n_points=n_points, normalise=True)
+        return shape.points
