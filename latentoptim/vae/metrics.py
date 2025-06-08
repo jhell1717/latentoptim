@@ -44,4 +44,4 @@ class Metrics:
         Returns:
             _type_: _description_
         """
-        return self._get_perimeter(self.points)/self._get_area(self.points)
+        return self._get_perimeter(self.points)**2/self._get_area(self.points)

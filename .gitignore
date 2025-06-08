@@ -2,3 +2,4 @@
 
 build/
 vae.egg-info/
+examples/shapes.pkl

@@ -23,7 +23,7 @@ class Generator:
         """
         for _ in tqdm(range(self.num_shapes)):
             shape_type = np.random.choice(
-                ['Circle', 'Triangle', 'Rectangle', 'Diamond', 'Heart', 'Oval', 'Star', 'Pentagon', 'Square'])
+                ['Circle', 'Triangle', 'Rectangle', 'Diamond', 'Heart', 'Oval', 'Star', 'Square'])
 
             if shape_type == 'Circle':
                 shape = Circle(radius=1, n_points=self.resolution)
@@ -50,8 +50,24 @@ class Generator:
             if shape_type == 'Oval':
                 shape = Oval(major_axis=1,minor_axis=3,n_points=self.resolution)
 
-            if shape_type == 'Pentagon':
-                shape = Pentagon(radius=1,n_points=self.resolution)
+            # if shape_type == 'Pentagon':
+            #     shape = Pentagon(radius=1,n_points=self.resolution)
 
             self.shapes.append(shape)
         return self.shapes
+
+    def generate_random_points(self, n_points=200):
+        """Generate a random set of 2D points for initial population.
+
+        Args:
+            n_points (int, optional): Number of points to generate. Defaults to 200.
+
+        Returns:
+            numpy.ndarray: Array of shape (n_points, 2) containing random points.
+        """
+        # Generate random points in [0, 1] range
+        points = np.random.rand(n_points, 2)
+        
+        # Create a shape object to normalize and resample the points
+        shape = Shape(points, n_points=n_points, normalise=True)
+        return shape.points
