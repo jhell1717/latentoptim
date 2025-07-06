@@ -1,10 +1,7 @@
 import numpy as np
-import matplotlib.pyplot as plt
-
 import torch
 
 import vae
-
 from pyga import Individual, blended, gaussian
 
 
@@ -14,7 +11,7 @@ class ShapeVAE(Individual):
     _mutate_method = staticmethod(gaussian)
 
     target_shape = None
-    model = None  # Class-level model storage
+    model = None  
 
     def __init__(self, genes, model=None):
         super().__init__(genes)
