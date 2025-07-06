@@ -1,8 +1,6 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
 import vae
-
 from pyga import Individual, blended, gaussian
 
 
