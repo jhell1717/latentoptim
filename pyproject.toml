@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [tool.setuptools]
-packages = ["vae","data"]
+packages = ["vae","data","utils"]
 
 [build-system]
 requires = ["setuptools>=42"]
