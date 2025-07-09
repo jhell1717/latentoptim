@@ -11,10 +11,8 @@ requires-python = ">=3.11"
 dependencies = [
     "torch",
     "Cython<3",
+    "externalpackage @ git+https://github.com/mark-hobbs/pyga.git"
 ]
-
-[tool.setuptools]
-packages = ["vae","data","utils"]
 
 [build-system]
 requires = ["setuptools>=42"]
