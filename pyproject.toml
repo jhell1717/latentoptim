@@ -11,7 +11,7 @@ requires-python = ">=3.11"
 dependencies = [
     "torch",
     "Cython<3",
-    "externalpackage @ git+https://github.com/mark-hobbs/pyga.git"
+    "pyga @ git+https://github.com/mark-hobbs/pyga.git"
 ]
 
 [build-system]
