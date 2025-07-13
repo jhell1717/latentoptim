@@ -78,7 +78,7 @@ Explainable AI is a sub field of AI that aims to demystify typically black box m
 ## Examples
 
 Training a VAE Model:
-<a href="https://github.com/jhell1717/latentoptim/blob/main/examples/vae_examples/train_vae.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+<a href="https://colab.research.google.com/github/jhell1717/latentoptim/blob/main/examples/vae_examples/train_vae.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
 
 Running the GPR Model:
 <a href="https://colab.research.google.com/github/jhell1717/latentoptim/blob/main/examples/ga_examples/run_GA.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
