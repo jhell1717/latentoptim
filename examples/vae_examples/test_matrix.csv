@@ -1,0 +1,2 @@
+model_name,data,latent_dim,batch_size,activation,lr
+model_001,/Users/joshuahellewell/Desktop/02-msc/01-modules/MSc Project - 771952/03-results/data/shapes100k.pkl,8,512,relu,1E-03
