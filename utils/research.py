@@ -167,7 +167,7 @@ def plot_all_latent_combinations(models, latent_dims, vae_metrics,
 
         # Plot 2D latent combinations with compactness overlay
         for grid_dims in latent_pairs:
-            fixed_dims = {i: 1.0 for i in all_indices if i not in grid_dims}
+            fixed_dims = {i: 0.0 for i in all_indices if i not in grid_dims}
             fixed_str = "_".join(
                 [f"z{i+1}={v}" for i, v in fixed_dims.items()])
             filename = f"varying_z{grid_dims[0]+1}_z{grid_dims[1]+1}_fixed_{fixed_str}.png"
