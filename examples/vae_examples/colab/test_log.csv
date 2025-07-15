@@ -1,2 +1,0 @@
-Model Name,Save Directory,Final Train Loss,Epochs,Batch Size,Model Link,Trained Data,Learning Rate
-example_model,/Users/joshuahellewell/Desktop/01-dev/latentoptim/examples/vae_examples/colab/example_model,192.44964838027954,100,512,/Users/joshuahellewell/Desktop/01-dev/latentoptim/examples/vae_examples/colab/example_model/vae_epoch_100_mse192.4.pt,/Users/joshuahellewell/Desktop/01-dev/latentoptim/examples/vae_examples/colab/demo_shapes.pkl,0.001
