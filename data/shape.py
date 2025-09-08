@@ -88,7 +88,7 @@ class Shape:
         ax.set_ylim(0,1)
         plt.xlabel('X')
         plt.ylabel('Y')
-        plt.show()
+        # plt.show()
 
     def rotate_shape(self,max_rotation = 360):
         angle = np.random.uniform(0, max_rotation)  # Pick a random rotation angle

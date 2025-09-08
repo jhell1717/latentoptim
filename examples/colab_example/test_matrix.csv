@@ -1,0 +1,2 @@
+model_name,data,latent_dim,batch_size,activation,lr
+model_001,/content/latentoptim/examples/vae_examples/colab/demo_shapes.pkl,8,512,relu,1E-03
